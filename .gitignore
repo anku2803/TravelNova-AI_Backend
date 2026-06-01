@@ -13,3 +13,5 @@ database.sqlite
 
 # Logs
 *.log
+
+.vercel
