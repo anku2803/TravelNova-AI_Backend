@@ -1,0 +1,15 @@
+# Local dependencies
+node_modules/
+
+# Environment configurations and secret tokens
+.env
+*.env
+.env.local
+
+# Databases (SQLite flat-files)
+database.sqlite
+*.sqlite
+*.sqlite-journal
+
+# Logs
+*.log
