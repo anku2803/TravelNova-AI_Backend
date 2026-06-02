@@ -1,7 +1,23 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
-const dbPath = path.resolve(__dirname, 'database.sqlite');
+let dbPath;
+if (process.env.VERCEL) {
+  dbPath = '/tmp/database.sqlite';
+  const sourceDbPath = path.resolve(__dirname, 'database.sqlite');
+  if (fs.existsSync(sourceDbPath) && !fs.existsSync(dbPath)) {
+    try {
+      fs.copyFileSync(sourceDbPath, dbPath);
+      console.log('Seeded database copied to /tmp successfully');
+    } catch (err) {
+      console.error('Error copying seed database to /tmp:', err.message);
+    }
+  }
+} else {
+  dbPath = path.resolve(__dirname, 'database.sqlite');
+}
+
 const db = new sqlite3.Database(dbPath);
 
 db.serialize(() => {
