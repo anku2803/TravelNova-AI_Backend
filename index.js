@@ -29,6 +29,7 @@ app.use(
           "'unsafe-eval'",
           "https://code.jquery.com"
         ],
+        scriptSrcAttr: ["'unsafe-inline'"],
         styleSrc: [
           "'self'",
           "'unsafe-inline'", // required for page inline styles
@@ -44,7 +45,8 @@ app.use(
           "'self'",
           "data:",
           "https://images.unsplash.com",
-          "https://*.unsplash.com"
+          "https://*.unsplash.com",
+          "https://api.qrserver.com"
         ],
         connectSrc: ["'self'", "http://localhost:5000"]
       }
@@ -229,10 +231,11 @@ const cacheOptions = {
   setHeaders: (res, filePath) => {
     const ext = path.extname(filePath).toLowerCase();
     // Cache styling, scripts, images and fonts aggressively
-    if (['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.webmanifest'].includes(ext)) {
+    // Cache images and fonts aggressively
+    if (['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.webmanifest'].includes(ext)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    } else if (ext === '.html') {
-      // HTML files must always revalidate to show updates instantly
+    } else if (['.html', '.css', '.js'].includes(ext)) {
+      // HTML, CSS, and JS files must always revalidate to show updates instantly
       res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     }
   }

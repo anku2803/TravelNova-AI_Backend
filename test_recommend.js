@@ -21,7 +21,7 @@ function extractGeminiText(data) {
 
 async function test() {
   const key = process.env.GEMINI_API_KEY;
-  const model = "gemini-3.5-flash";
+  const model = process.env.GOOGLE_MODEL_ID || "gemini-2.5-flash";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
 
   const messages = [
