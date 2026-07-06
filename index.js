@@ -221,7 +221,8 @@ app.get('/api/merchant', (req, res) => {
   });
 });
 
-const rootStatic = path.join(__dirname, '..', 'frontend');
+const clientDist = path.join(__dirname, '..', 'client', 'dist');
+const rootStatic = fs.existsSync(clientDist) ? clientDist : path.join(__dirname, '..', 'frontend');
 
 // Aggressive Cache-Control configuration for fast loading on subsequent visits
 const oneYear = 31536000000; // 1 year in milliseconds
@@ -242,11 +243,6 @@ const cacheOptions = {
 };
 
 app.use(express.static(rootStatic, cacheOptions));
-
-const clientDist = path.join(__dirname, '..', 'client', 'dist');
-if (fs.existsSync(clientDist)) {
-  app.use('/client', express.static(clientDist, cacheOptions));
-}
 
 try {
   const aiRoutes = require('./ai_routes');
