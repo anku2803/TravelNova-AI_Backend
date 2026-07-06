@@ -261,9 +261,11 @@ try {
 app.get('*', (req, res) => {
   const index = path.join(rootStatic, 'index.html');
 
-  res.sendFile(index, (err) => {
-    if (err) res.status(404).send('Not found');
-  });
+  if (fs.existsSync(index)) {
+    return res.sendFile(index);
+  }
+  // Redirect to live frontend if static files are not found (e.g. in standalone Vercel API deployment)
+  res.redirect('https://frontend-plum-psi-84.vercel.app');
 });
 
 const HOST = process.env.HOST || '0.0.0.0';
